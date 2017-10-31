@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<link rel="stylesheet" href="/modules/bootstrap/dist/css/bootstrap.css">
+	<script src="/modules/socket.io-client/dist/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+	<style>
+		#feed li:nth-child(odd) { background: #eee; }
+	</style>
+	<script>
+		var text_color = localStorage.getItem("color") || "black";
+
+		$(function () {
+			var socket = io();
+			$('form').submit(function(){
+				socket.emit('chat message', $('#m').val());
+				$('#m').val('');
+				return false;
+			});
+			socket.on('chat message', function(msg,color){
+				var li = $('<li>');
+				li.text(msg);
+				li.css("color", color);
+				$('#feed').append(li);
+			});
+		});
+	</script>
+</head>
+<body style="display: flex; justify-content: center">
+	<div class="col-xs-8 panel panel-default">
+		<div class="row">
+			<div class="panel panel-default" style="height: 500px; overflow-y: auto">
+				<ul id="feed">
+
+				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<form>
+				<input id="m" class="col-xs-12 panel panel-default">
+				<button id="btn" class="col-xs-offset-9 col-xs-3">Send</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
