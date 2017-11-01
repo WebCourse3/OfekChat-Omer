@@ -15,31 +15,41 @@ io.on('connection', function(socket){
 	var sessionColor = "black";
 	var sessionIsBold = false;
 	var sessionIsItallic = false;
+	var border = "";
 
 	socket.on('chat message', function(msg){
-		if (msg.match(/^\/setColor.*/i)) {
-			sessionColor = msg.split(" ")[1];
-			console.log("Session color changed to: " + sessionColor);
-		}
-		else if (msg.match(/^\/setBold.*/i)) {
-			if (sessionIsBold === false ) {
-				sessionIsBold = true;
-			}
-			else if (sessionIsBold === true){
-				sessionIsBold = false;
-			}
-		}
-		else if (msg.match(/^\/setItallic.*/i)) {
-			if (sessionIsItallic === false) {
-				sessionIsItallic = true;
-			}
-			else if (sessionIsItallic === true) {
-				sessionIsItallic = false;
-			}
-		}
-		else {
-			console.log(msg);
-			socket.broadcast.emit('chat message', msg,sessionColor,sessionIsBold,sessionIsItallic);
+		switch(msg) {
+			case String (msg.match(/^\/setColor.*/i)):
+				sessionColor = msg.split(" ")[1];
+				console.log("Session color changed to: " + sessionColor);
+				break;
+
+			case String(msg.match(/^\/setBold.*/i)):
+				if (sessionIsBold === false ) {
+					sessionIsBold = true;
+				}
+				else if (sessionIsBold === true){
+					sessionIsBold = false;
+				}
+				break;
+
+			case String(msg.match(/^\/setItallic.*/i)):
+				if (sessionIsItallic === false) {
+					sessionIsItallic = true;
+				}
+				else if (sessionIsItallic === true) {
+					sessionIsItallic = false;
+				}
+				break;
+
+			case String(msg.match(/^\/setBorder.*/i)):
+				border = msg.split(" ").slice(1);
+				console.log(border);
+				break;
+			default:
+				console.log(msg);
+				socket.broadcast.emit('chat message', msg,sessionColor,sessionIsBold,sessionIsItallic,border);
+				break;
 		}
 	});
 

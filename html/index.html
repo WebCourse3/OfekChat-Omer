@@ -23,7 +23,7 @@
 					return false;
 				}
 			});
-			socket.on('chat message', function(msg,color,isBold,isItallic){
+			socket.on('chat message', function(msg,color,isBold,isItallic,border){
 				var li = $('<li>');
 				li.text(msg);
 				li.css("color", color);
@@ -32,6 +32,9 @@
 				}
 				if (isItallic) {
 					li.css("font-style","italic");
+				}
+				if (border !== "") {
+					li.css("border", border.join(" "));
 				}
 				$('#feed').append(li);
 			});
